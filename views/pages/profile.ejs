@@ -20,7 +20,7 @@
 </div>
 <% } %>
 
-<form class="form-group" action="/profile" method="POST">
+<form class="form-group" action="/profile" method="POST" enctype="multipart/form-data">
     <div class="inline-form">
         <label for="" class="label-control">Your name</label>
         <input type="text" class="form-control" name="fullname">
@@ -40,10 +40,17 @@
         <label for="" class="label-control">About you</label>
         <textarea class="form-control" name="about" id="about" rows="5"></textarea>
     </div>
+
+    <div class="form-group">
+        <label class="label-control">Upload File</label>
+        <input class="form-control" type="file" name="file">
+    </div>
     
     <div class="form-group">
         <input type="submit" name="submit" class="btn btn-primary pull-right">
     </div>
+
+
 </form>
 
 <% include footer %>

@@ -1,6 +1,10 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var fs = require('fs');
+var busboy = require('connect-busboy');
+
+
 var mysql = require('mysql');
 var connection = mysql.createConnection({
     host: 'localhost',
@@ -12,6 +16,7 @@ var connection = mysql.createConnection({
 app.set('view engine', 'ejs');
 
 //Middleware
+app.use(busboy());
 app.use('/assets', express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -50,7 +55,19 @@ app.post('/profile', function(request, response) {
     var phone = request.body.phone;
     var email = request.body.email;
     var about = request.body.about;
-    console.log(request.body);
+    var fstream;
+
+    request.pipe(request.busboy);
+    request.busboy.on('file', function(fieldname, file, filename){
+        console.log("Uploading "+ filename);
+        fstream = fs.createWriteStream(__dirname + '/files/' + filename);
+        file.pipe(fstream);
+        fstream.on('close', function(){
+            response.redirect('/profile');
+        })
+
+    });
+
     response.render('pages/profile', {
         fullname: name,
         phone: phone,
