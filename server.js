@@ -34,17 +34,36 @@ app.post('/contact', function(request, response){
     var name = request.body.name;
     var email = request.body.email;
     var message = request.body.message;
-    connection.query("INSERT INTO messages values (?, ?, ?, ?)", [2, name, email, message], function(err) {
+    connection.query("INSERT INTO messages values (?, ?, ?, ?)", [3, name, email, message], function(err) {
        if (err) throw err;
     });
     connection.end();
     response.render('pages/contact', {message: "Your message was successfully sent to the support"});
 });
+
+app.get('/profile', function(request, response) {
+    response.render('pages/profile', {title: "Profile page"});
+});
+
+app.post('/profile', function(request, response) {
+    var name = request.body.fullname;
+    var phone = request.body.phone;
+    var email = request.body.email;
+    var about = request.body.about;
+    console.log(request.body);
+    response.render('pages/profile', {
+        fullname: name,
+        phone: phone,
+        email: email,
+        about: about
+    })
+});
+
+
 //Sever side bullshit is going to be here , this sentence doesn't make any sense please ignore it
 var server = app.listen(8080, function() {
     var host = server.address().address;
     var port = server.address().port;
 
     console.log("This app is listening at port %s %s ", host, port)
-    console.log("This is some powerful shit");
 });
